@@ -78,6 +78,11 @@ module.exports = {
       template: "src/sign-in.html",
       chunks: ["main"],
     }),
+    new HtmlWebpackPlugin({
+      filename: "sign-up.html",
+      template: "src/sign-up.html",
+      chunks: ["main"],
+    }),
     new webpack.HotModuleReplacementPlugin(),
   ],
 };
