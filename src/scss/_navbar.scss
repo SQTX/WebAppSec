@@ -1,4 +1,21 @@
 .navbar {
   z-index: 3;
   background-color: #fff;
+
+  & ul.navbar-nav {
+    background-color: ping;
+    &.logout {
+      display: flex;
+      // display: none;
+    }
+    &.login {
+      display: none;
+      // display: flex;
+
+      & .badge {
+        background-color: $secondary;
+        border-radius: 5px;
+      }
+    }
+  }
 }

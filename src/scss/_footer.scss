@@ -1,7 +1,16 @@
 footer {
- background-color: $dark-font;
+  background-color: $dark-font;
 }
 
 .second-footer {
   background-color: $primary;
+}
+
+.sign-in {
+  .second-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 }

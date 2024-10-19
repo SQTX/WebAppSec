@@ -68,7 +68,16 @@ module.exports = {
   },
 
   plugins: [
-    new HtmlWebpackPlugin({ template: "./src/index.html" }),
+    new HtmlWebpackPlugin({
+      filename: "index.html",
+      template: "src/index.html",
+      chunks: ["main"],
+    }),
+    new HtmlWebpackPlugin({
+      filename: "sign-in.html",
+      template: "src/sign-in.html",
+      chunks: ["main"],
+    }),
     new webpack.HotModuleReplacementPlugin(),
   ],
 };
