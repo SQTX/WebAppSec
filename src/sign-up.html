@@ -57,35 +57,31 @@
           </div>
           <!-- Name input -->
           <div data-mdb-input-init class="form-outline mb-2">
-            <input type="text" id="registerName" class="form-control" />
+            <input type="text" id="sign-up-name" class="form-control" />
             <label class="form-label" for="registerName">Imię</label>
           </div>
 
           <!-- Username input -->
           <div data-mdb-input-init class="form-outline mb-2">
-            <input type="text" id="registerUsername" class="form-control" />
+            <input type="text" id="sign-up-login" class="form-control" />
             <label class="form-label" for="registerUsername">Nazwa</label>
           </div>
 
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-2">
-            <input type="email" id="registerEmail" class="form-control" />
+            <input type="email" id="sign-up-email" class="form-control" />
             <label class="form-label" for="registerEmail">Email</label>
           </div>
 
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-2">
-            <input type="password" id="registerPassword" class="form-control" />
+            <input type="password" id="sign-up-pass" class="form-control" />
             <label class="form-label" for="registerPassword">Hasło</label>
           </div>
 
           <!-- Repeat Password input -->
           <div data-mdb-input-init class="form-outline mb-2">
-            <input
-              type="password"
-              id="registerRepeatPassword"
-              class="form-control"
-            />
+            <input type="password" id="sign-up-reppass" class="form-control" />
             <label class="form-label" for="registerRepeatPassword"
               >Powtórz hasło</label
             >
@@ -97,8 +93,7 @@
               class="form-check-input me-2"
               type="checkbox"
               value=""
-              id="registerCheck"
-              checked
+              id="accept-rules"
               aria-describedby="registerCheckHelpText"
             />
             <label class="form-check-label" for="registerCheck">
@@ -108,7 +103,8 @@
 
           <!-- Submit button -->
           <button
-            type="submit"
+            id="sign-up-btn"
+            type="button"
             data-mdb-button-init
             data-mdb-ripple-init
             class="btn btn-primary btn-block mb-2"
