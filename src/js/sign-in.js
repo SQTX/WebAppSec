@@ -33,8 +33,16 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         // Obsługujemy odpowiedź z serwera
         console.log("Login success:", data);
-        // alert(`Login successful! Welcome, ${data.user}`);
-        window.location.href = "/index-login.html"; // Przekierowanie na stronę główną po zalogowaniu
+
+        // Zapisujemy token JWT w localStorage
+        localStorage.setItem("accessToken", data.accessToken);
+        // (Alternatywnie) Zapisujemy accessToken jako ciastko z atrybutami bezpieczeństwa
+        // document.cookie = `accessToken=${data.accessToken}; Path=/; Max-Age=900; Secure; HttpOnly; SameSite=Strict`;
+        // Zapisujemy refresh token w localStorage
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+        // Przekierowanie na stronę główną po zalogowaniu
+        window.location.href = "/index-login.html";
       })
       .catch((error) => {
         // Obsługujemy błąd

@@ -3,6 +3,8 @@ import "bootstrap";
 import "./scss/style.scss";
 import "./js/sign-in.js";
 import "./js/sign-up.js";
+import "./js/feature.js";
+import "./js/logout.js";
 
 import "../public/assets/img/areopress.jpg";
 import "../public/assets/img/beans_1.jpg";

@@ -1,0 +1,11 @@
+GET http://localhost:3000/authtest
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImZvbyIsImlhdCI6MTcaMTUyMjA4MCwiZXhwIjoxNzMxNTIyMDk1fQ.PbLPdXRO_kSy8xdUffhfjLrXzcqjluZ2JaofJ_j7zZw
+
+###
+POST http://localhost:3000/token
+Content-Type: application/json
+
+{
+  "refreshToken":
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImZvbyIsImlhdCI6MTczMTUyNDQwMCwiZXhwIjoxNzMyMTI5MjAwfQ.tdLF1phuDcfgiXCDMiYJ5LOzCYg2w-56-jaS7JZ1Ssk"
+}
