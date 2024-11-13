@@ -3,10 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const signInLogin = document.getElementById("sign-in-login");
   const signInPass = document.getElementById("sign-in-pass");
 
-  console.log("Mirek Skura");
-
   signInBtn.addEventListener("click", () => {
-    console.log("Chuj");
     const loginInput = signInLogin.value;
     console.log(loginInput);
     signInLogin.value = "";
@@ -24,8 +21,25 @@ document.addEventListener("DOMContentLoaded", function () {
         password: passwordInput,
       }), // Konwertujemy dane do formatu JSON
     })
-      .then((response) => response.json()) // Odbieramy i parsujemy odpowiedź
-      .then((data) => console.log(data)) // Wyświetlamy dane w konsoli
-      .catch((error) => console.error("Error:", error)); // Obsługa błędów
+      .then((response) => {
+        if (!response.ok) {
+          // Jeżeli status HTTP nie wskazuje sukcesu, przechwytujemy błąd
+          return response.json().then((error) => {
+            throw new Error(error.message);
+          });
+        }
+        return response.json(); // Parsujemy odpowiedź JSON w przypadku sukcesu
+      })
+      .then((data) => {
+        // Obsługujemy odpowiedź z serwera
+        console.log("Login success:", data);
+        // alert(`Login successful! Welcome, ${data.user}`);
+        window.location.href = "/index-login.html"; // Przekierowanie na stronę główną po zalogowaniu
+      })
+      .catch((error) => {
+        // Obsługujemy błąd
+        console.error("Error:", error.message);
+        alert(`Login failed: ${error.message}`);
+      });
   });
 });

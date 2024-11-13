@@ -74,6 +74,11 @@ module.exports = {
       chunks: ["main"],
     }),
     new HtmlWebpackPlugin({
+      filename: "index-login.html",
+      template: "src/index-login.html",
+      chunks: ["main"],
+    }),
+    new HtmlWebpackPlugin({
       filename: "sign-in.html",
       template: "src/sign-in.html",
       chunks: ["main"],

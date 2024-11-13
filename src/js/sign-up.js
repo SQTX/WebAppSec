@@ -7,37 +7,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const signUpRepPass = document.getElementById("sign-up-reppass");
   const signUpAcceptBox = document.getElementById("accept-rules");
 
-  console.log("Danielek Skura");
-
   signUpBtn.addEventListener("click", () => {
-    let signUpOk = false;
     let signUpStatus = {
-      login: false,
-      email: false,
       password: false,
       rules: false,
     };
 
-    // --- User name ------------
+    // --- User name --------------------------------
     const nameInput = signUpName.value;
     console.log(nameInput);
 
-
-    // --- Login ------------
+    // --- Login ------------------------------------
     const loginInput = signUpLogin.value;
     console.log(loginInput);
 
-    // TODO: Sprawdzenie czy login jest zajęty
-    signUpStatus.login = true;
-
-    // --- Mail ------------
+    // --- Mail -------------------------------------
     const emailInput = signUpEmail.value;
     console.log(emailInput);
 
-    // TODO: Sprawdzenie czy mail jest w DB
-    signUpStatus.email = true;
-
-    // --- Passwords ------------
+    // --- Passwords --------------------------------
     const passwordInput = signUpPass.value;
     console.log(passwordInput);
     const repPasswordInput = signUpRepPass.value;
@@ -52,11 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
       signUpRepPass.style.borderColor = "red";
       // Alert:
       alert("Podane hasła są niepoprawne!");
-    }else {
+    } else {
       signUpStatus.password = true;
     }
 
-    // --- Rules checkbox ------------
+    // --- Rules checkbox ---------------------------
     const rulesBox = signUpAcceptBox.checked;
     console.log(rulesBox);
 
@@ -65,20 +53,12 @@ document.addEventListener("DOMContentLoaded", function () {
       signUpAcceptBox.style.borderColor = "red";
       // Alert:
       alert("Zaakceptowanie regulaminu jest wymagane");
-    }else {
+    } else {
       signUpStatus.rules = true;
     }
 
-    if (
-      signUpStatus.login === true &&
-      signUpStatus.email === true &&
-      signUpStatus.password === true &&
-      signUpStatus.rules === true
-    ) {
-      signUpOk = true;
-    }
-
-    if (signUpOk) {
+    // Send data to server:
+    if (signUpStatus.password === true && signUpStatus.rules === true) {
       fetch("/users/signup", {
         method: "POST", // Metoda HTTP
         headers: {
@@ -90,9 +70,29 @@ document.addEventListener("DOMContentLoaded", function () {
           email: emailInput,
           password: passwordInput,
         }), // Konwertujemy dane do formatu JSON
-      }).then((response) => response.json()) // Odbieramy i parsujemy odpowiedź
-        .then((data) => console.log(data)) // Wyświetlamy dane w konsoli
-        .catch((error) => console.error("Error:", error)); // Obsługa błędów
+      })
+        .then((response) => {
+          if (!response.ok) {
+            // Jeśli odpowiedź nie jest sukcesem (status 2xx), przetwarzamy ją jako błąd
+            return response.json().then((errorData) => {
+              // Rzucamy błąd z treścią odpowiedzi, aby trafił do bloku catch
+              throw new Error(errorData.message || "Unknown error");
+            });
+          }
+          return response.json(); // Jeśli sukces, parsujemy odpowiedź JSON
+        })
+        .then((data) => {
+          // Sukces rejestracji
+          console.log("Rejestracja udana:", data);
+          alert("Konto zostało utworzone pomyślnie!");
+          // Opcjonalnie: przekierowanie na stronę logowania lub główną
+          window.location.href = "/sign-in.html"; // Na przykład przekierowanie na stronę logowania
+        })
+        .catch((error) => {
+          // Obsługa błędu
+          console.error("Error:", error.message);
+          alert(`Rejestracja nieudana: ${error.message}`);
+        });
     }
   });
 });

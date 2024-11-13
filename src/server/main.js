@@ -1,8 +1,11 @@
 const path = require("path");
 const express = require("express");
+const bcrypt = require('bcrypt')
 
 const usersSignIn = require("./routes/sign-in");
 const usersSignUp = require("./routes/sign-up");
+const userLogout = require("./routes/logout");
+const rulesFile = require("./routes/rules-file");
 
 const sideUrl = "http://localhost";
 const port = 3000;
@@ -35,5 +38,9 @@ server.listen(port, () => {
   console.log(`Serwer nasłuchuje na ${sideUrl}:${port}`);
 });
 
-usersSignIn(server);
-usersSignUp(server);
+ let users = [];
+
+usersSignIn(server, bcrypt, users);
+usersSignUp(server, bcrypt, users);
+userLogout(server);
+rulesFile(server, path);

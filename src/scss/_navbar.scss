@@ -9,8 +9,8 @@
       // display: none;
     }
     &.login {
-      display: none;
-      // display: flex;
+      // display: none;
+      display: flex;
 
       & .badge {
         background-color: $secondary;

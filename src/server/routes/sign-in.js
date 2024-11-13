@@ -1,21 +1,22 @@
-function usersSignIn(server) {
-  let users = [];
+function usersSignIn(server, bcrypt, users) {
+  server.post("/users/signin", async (req, res) => {
+    const user = users.find((user) => (user.login === req.body.login));
+    if (!user) {
+      return res.status(400).json({message: "Cannot find user"});
+    }
 
-
-  server.get("/users", (req, res) => {
-    console.log("Otrzymano żądanie GET /users");
-    res.send("Daniel Skura");
-  });
-
-
-  server.post("/users/signin", (req, res) => {
-    const user = { login: req.body.login, password: req.body.password };
-    users.push(user);
-    console.log("Login:", user.login);
-    console.log("Password:", user.password);
-    console.log("Users list:", users);
-    res.status(201).send();
+    try {
+      if (await bcrypt.compare(req.body.password, user.password)) {
+        console.log("Success");
+        res.status(200).json({ message: "Success", user: user.login });
+      } else {
+        console.log("Not allowed");
+        res.status(403).json({ message: "Not allowed" });
+      }
+    } catch {
+      res.status(500).json({ message: "Server error" });
+    }
   });
 }
 
-module.exports =  usersSignIn;
+module.exports = usersSignIn;
