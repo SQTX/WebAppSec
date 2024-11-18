@@ -56,8 +56,7 @@ server.listen(port, () => {
 usersSignUp(server, bcrypt, dbConfig);
 usersSignIn(server, bcrypt, jwt, dbConfig);
 
-userLogout(server, jwt, ACCESS_TOKEN_SECRET);
-userLogout(server);
+userLogout(server, jwt, dbConfig);
 
 rulesFile(server, path);
 

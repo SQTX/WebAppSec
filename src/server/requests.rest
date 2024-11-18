@@ -18,3 +18,18 @@ Content-Type: application/json
   "login": "Skurson",
   "password": "skura"
 }
+
+###
+POST http://localhost:3000/users/signin
+Content-Type: application/json
+
+{
+  "login": "foo",
+  "password": "foo"
+}
+
+###
+
+POST http://localhost:3000/users/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibG9naW4iOiJmb28iLCJpYXQiOjE3MzE5NDAzOTYsImV4cCI6MTczMTk0MTI5Nn0.R3it0MFx4bymx-KgArYg2laEO_TeTkd57LFEH8hkoLo

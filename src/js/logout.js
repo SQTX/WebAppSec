@@ -23,7 +23,7 @@ logoutBtn.addEventListener("click", () => {
       return response.json(); // Parsowanie odpowiedzi w przypadku sukcesu
     })
     .then((data) => {
-      console.log("Logout successful:", data);
+      // console.log("Data:", data.message);
       // Usuwamy tokeny z localStorage
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
@@ -33,6 +33,10 @@ logoutBtn.addEventListener("click", () => {
     })
     .catch((error) => {
       console.error("Error during logout:", error.message);
-      alert("Logout failed: " + error.message);
+      // alert("Logout failed: " + error.message);
+
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      window.location.href = "/";
     });
 });
