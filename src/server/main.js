@@ -1,12 +1,20 @@
-const ACCESS_TOKEN_SECRET =
-  "5e6cc96353daa632eb71ce86cd96d266158ed9086ecdbac6948d02d63478a7656da7042153b2f3ff46bed0c967f63f8cfe0ad19dd64493790b91e0bd5c700875";
-const REFRESH_TOKEN_SECRET =
-  "d760f0032b06bbae094e091439f6eb06eac8fa26b9c8295dfdb8ec32c918c44c4791eb75d3a631e61ec1e590a5aa581a562591a005b80f13d2516f06e25ccb63";
+const ACCESS_TOKEN_SECRET = "5e6cc96353daa632eb71ce86cd96d266158ed9086ecdbac6948d02d63478a7656da7042153b2f3ff46bed0c967f63f8cfe0ad19dd64493790b91e0bd5c700875";
+const REFRESH_TOKEN_SECRET = "d760f0032b06bbae094e091439f6eb06eac8fa26b9c8295dfdb8ec32c918c44c4791eb75d3a631e61ec1e590a5aa581a562591a005b80f13d2516f06e25ccb63";
 
 const path = require("path");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mysql = require("mysql2");
+
+// Konfiguracja połączenia
+const dbConfig = {
+  host: "localhost", // Adres hosta (dla lokalnego serwera to 'localhost')
+  user: "root", // Nazwa użytkownika MySQL (np. 'root')
+  password: "sqtx7177", // Hasło użytkownika
+  database: "coffee_store_users", // Nazwa bazy danych, do której chcesz się połączyć
+  port: 3306, // Domyślny port MySQL
+};
 
 const usersSignIn = require("./routes/sign-in");
 const usersSignUp = require("./routes/sign-up");
@@ -46,7 +54,7 @@ server.listen(port, () => {
 
 let users = [];
 
-usersSignUp(server, bcrypt, users);
+usersSignUp(server, bcrypt, dbConfig);
 usersSignIn(
   server,
   bcrypt,
@@ -117,3 +125,42 @@ server.get("/authtest", authenticationToken, (req, res) => {
   res.send(users.filter((user) => user.login === req.user.login));
   // res.json(users.filter((user) => user.login === req.user.login));
 });
+
+
+
+
+
+
+
+// // Tworzenie połączenia
+// const connection = mysql.createConnection(dbConfig);
+
+// // Próba połączenia z bazą danych
+// connection.connect((err) => {
+//   if (err) {
+//     console.error("Błąd podczas łączenia z bazą danych:", err.message);
+//     return;
+//   }
+//   console.log("Połączono z bazą danych MySQL!");
+// });
+
+// // Zamknięcie połączenia (przykład - w aplikacji powinno być w odpowiednim momencie)
+// process.on("SIGINT", () => {
+//   connection.end((err) => {
+//     if (err) {
+//       console.error("Błąd podczas zamykania połączenia:", err.message);
+//     } else {
+//       console.log("Połączenie z bazą danych zostało zamknięte.");
+//     }
+//     process.exit();
+//   });
+// });
+
+
+// connection.query("SELECT * FROM clients", (err, results) => {
+//   if (err) {
+//     console.error("Błąd w zapytaniu:", err.message);
+//     return;
+//   }
+//   console.log("Wyniki zapytania:", results);
+// });
