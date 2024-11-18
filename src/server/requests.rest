@@ -1,5 +1,5 @@
 GET http://localhost:3000/authtest
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImZvbyIsImlhdCI6MTcaMTUyMjA4MCwiZXhwIjoxNzMxNTIyMDk1fQ.PbLPdXRO_kSy8xdUffhfjLrXzcqjluZ2JaofJ_j7zZw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibG9naW4iOiJTa3Vyc29uIiwiaWF0IjoxNzMxOTQyNjAyLCJleHAiOjE3MzE5NDM1MDJ9.4FkYDDmY11VWmGHomXmH0ld-1aFIy2_fmBYyUAkbm3M
 
 ###
 POST http://localhost:3000/token
