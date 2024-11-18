@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         // Obsługujemy odpowiedź z serwera
         console.log("Login success:", data);
+        console.log("Access:", data.accessToken);
+        console.log("Refresh:", data.refreshToken);
 
         // Zapisujemy token JWT w localStorage
         localStorage.setItem("accessToken", data.accessToken);

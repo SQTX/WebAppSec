@@ -52,19 +52,13 @@ server.listen(port, () => {
   console.log(`Serwer nasłuchuje na ${sideUrl}:${port}`);
 });
 
-let users = [];
 
 usersSignUp(server, bcrypt, dbConfig);
-usersSignIn(
-  server,
-  bcrypt,
-  jwt,
-  users,
-  ACCESS_TOKEN_SECRET,
-  REFRESH_TOKEN_SECRET
-);
+usersSignIn(server, bcrypt, jwt, dbConfig);
+
 userLogout(server, jwt, ACCESS_TOKEN_SECRET);
 userLogout(server);
+
 rulesFile(server, path);
 
 
