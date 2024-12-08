@@ -44,7 +44,24 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("refreshToken", data.refreshToken);
 
         // Przekierowanie na stronę główną po zalogowaniu
-        window.location.href = "/index-login.html";
+        // window.location.href = "/index-login.html";
+        // window.location.href = "/cart/numberof";
+        fetch("/cart/numberof", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        })
+          .then((response) => {
+            return response.json(); // Parsujemy odpowiedź JSON w przypadku sukcesu
+          })
+          .then((data) => {
+            const itemsInCart = data.NumberOfProducts;
+            console.log("Liczba produktów w koszyku:", itemsInCart);
+            localStorage.setItem("itemsInCart", itemsInCart);
+            window.location.href = "/index-login.html";
+          });
       })
       .catch((error) => {
         // Obsługujemy błąd

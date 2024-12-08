@@ -133,7 +133,7 @@ function authenticationToken(req, res, next) {
   const connection = mysql.createConnection(dbConfig);
 
   // Pobieramy ACCESS_TOKEN_SECRET z bazy danych na podstawie userId
-  const getSecretQuery = `SELECT access_token_secret FROM clients WHERE id = ?`;
+  const getSecretQuery = `SELECT access_token_secret FROM clients WHERE client_id = ?`;
 
   connection.query(getSecretQuery, [userId], (err, results) => {
     if (err) {
@@ -159,44 +159,9 @@ function authenticationToken(req, res, next) {
   });
 }
 
-// Funkcja do wyciągania ID użytkownika z tokenu
-function getUserIdFromToken(token) {
-  try {
-    // Podziel token na trzy części
-    const parts = token.split(".");
-
-    if (parts.length !== 3) {
-      throw new Error("Nieprawidłowy token JWT");
-    }
-
-    // Zdekoduj drugą część (payload), która jest zakodowana w Base64
-    const payloadBase64 = parts[1];
-    const decodedPayload = Buffer.from(payloadBase64, "base64").toString(
-      "utf8"
-    );
-
-    // Parsuj JSON
-    const parsedPayload = JSON.parse(decodedPayload);
-
-    // Zakładając, że ID użytkownika jest zapisane w polu 'id'
-    return parsedPayload && parsedPayload.id ? parsedPayload.id : null;
-  } catch (error) {
-    console.error("Błąd dekodowania tokenu JWT:", error.message);
-    return null; // Zwróć null, jeśli wystąpi błąd
-  }
-}
 
 module.exports = authenticationToken;
 
-// Trasa zabezpieczona
-server.get("/authtest", authenticationToken, (req, res) => {
-  console.log("Profile activate by:", req.user.login);
-
-  // res.send(users.filter((user) => user.login === req.user.login));
-  // res.send(req.user.login);
-  res.status(200).json({ login: req.user.login });
-  // res.json(users.filter((user) => user.login === req.user.login));
-});
 
 function getUserIdFromToken(token) {
   try {
@@ -230,34 +195,46 @@ function getUserIdFromToken(token) {
   }
 }
 
-// // Tworzenie połączenia
-// const connection = mysql.createConnection(dbConfig);
 
-// // Próba połączenia z bazą danych
-// connection.connect((err) => {
-//   if (err) {
-//     console.error("Błąd podczas łączenia z bazą danych:", err.message);
-//     return;
-//   }
-//   console.log("Połączono z bazą danych MySQL!");
-// });
+const connection = mysql.createConnection(dbConfig); // Connection with DB
 
-// // Zamknięcie połączenia (przykład - w aplikacji powinno być w odpowiednim momencie)
-// process.on("SIGINT", () => {
-//   connection.end((err) => {
-//     if (err) {
-//       console.error("Błąd podczas zamykania połączenia:", err.message);
-//     } else {
-//       console.log("Połączenie z bazą danych zostało zamknięte.");
+// Endpoint rejestracji użytkownika
+server.get("/cart/numberof", authenticationToken, async (req, res) => {
+  try {
+    const clientID = req.user.id;
+    const sqlItemInCart = `SELECT COUNT(cart_id) AS NumberOfProducts FROM cart_products WHERE cart_id=?`;
+
+    const [cartResult] = await connection
+      .promise()
+      .query(sqlItemInCart, [clientID]);
+    const numberOfProducts = cartResult[0].NumberOfProducts;
+    console.log(numberOfProducts);
+
+    res.status(201).json({ NumberOfProducts: numberOfProducts });
+  } catch (error) {
+    console.error("Błąd serwera:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+//  const connection = mysql.createConnection(dbConfig);
+
+//  server.post("/cart", authenticationToken, async (req, res) => {
+//     try {
+//       const clientID = req.user.id;
+//       const sqlItemInCart = `SELECT COUNT(cart_id) AS NumberOfProducts FROM cart_products WHERE cart_id=?`;
+
+//       const [cartResult] = await connection
+//         .promise()
+//         .query(sqlItemInCart, [clientID]);
+//       const numberOfProducts = cartResult[0].NumberOfProducts;
+//       console.log(numberOfProducts);
+
+//       res.status(201).json({ NumberOfProducts: numberOfProducts });
+//     } catch (error) {
+//       console.error("Błąd serwera:", error.message);
+//       res.status(500).json({ message: "Server error" });
 //     }
-//     process.exit();
-//   });
-// });
-
-// connection.query("SELECT * FROM clients", (err, results) => {
-//   if (err) {
-//     console.error("Błąd w zapytaniu:", err.message);
-//     return;
-//   }
-//   console.log("Wyniki zapytania:", results);
-// });
+//  });

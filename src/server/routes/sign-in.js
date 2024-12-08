@@ -1,6 +1,5 @@
 const mysql = require("mysql2");
 
-
 function usersSignIn(server, bcrypt, jwt, dbConfig) {
   const connection = mysql.createConnection(dbConfig);
 
@@ -64,15 +63,18 @@ function usersSignIn(server, bcrypt, jwt, dbConfig) {
             const { access_token_secret, refresh_token_secret } =
               secretsResults[0];
 
+            console.log("Dane ID:", user.client_id);
+            console.log("Dane login:", user.login);
+
             // Generowanie tokenów
             const accessToken = jwt.sign(
-              { id: user.id, login: user.login }, // Dane użytkownika w tokenie
+              { id: user.client_id, login: user.login }, // Dane użytkownika w tokenie
               access_token_secret,
               { expiresIn: "15m" } // Token ważny przez 15 minut
             );
 
             const refreshToken = jwt.sign(
-              { id: user.id, login: user.login }, // Dane użytkownika w tokenie
+              { id: user.client_id, login: user.login }, // Dane użytkownika w tokenie
               refresh_token_secret,
               { expiresIn: "7d" } // Token ważny przez 7 dni
             );

@@ -33,3 +33,7 @@ Content-Type: application/json
 POST http://localhost:3000/users/logout
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibG9naW4iOiJmb28iLCJpYXQiOjE3MzE5NDAzOTYsImV4cCI6MTczMTk0MTI5Nn0.R3it0MFx4bymx-KgArYg2laEO_TeTkd57LFEH8hkoLo
+
+###
+GET http://localhost:3000/cart/numberof
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibG9naW4iOiJ0b3JiaSIsImlhdCI6MTczMzY4MDg0MywiZXhwIjoxNzMzNjgxNzQzfQ.hngIKH1tQJVDzNKbQ7ojqbiM1Rc-2dIoUjGy5FuaigQ

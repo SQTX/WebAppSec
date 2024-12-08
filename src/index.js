@@ -5,6 +5,7 @@ import "./js/sign-in.js";
 import "./js/sign-up.js";
 import "./js/feature.js";
 import "./js/logout.js";
+import "./js/load.js";
 
 import "../public/assets/img/no-photo.jpg";
 import "../public/assets/img/areopress.jpg";
