@@ -96,22 +96,6 @@ server.post("/token", (req, res) => {
   });
 });
 
-// function authenticationToken(req, res, next) {
-//   // Poprawny sposób pobrania nagłówka "authorization"
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
-
-//   if (token == null) return res.sendStatus(401); // Brak tokenu = 401 Unauthorized
-
-//   jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
-//     if (err) return res.sendStatus(403); // Nieprawidłowy token = 403 Forbidden
-//     req.user = user; // Przypisanie użytkownika do żądania
-//     next(); // Przejście do następnej funkcji
-//   });
-// }
-
-// const jwt = require("jsonwebtoken");
-// const mysql = require("mysql2");
 
 // Funkcja do autoryzacji tokenu
 function authenticationToken(req, res, next) {
@@ -242,22 +226,41 @@ server.post("/cart/additem", authenticationToken, async (req, res) => {
   }
 });
 
-//  const connection = mysql.createConnection(dbConfig);
+server.get("/cart/data", authenticationToken, async (req, res) => {
+  try {
+    const clientID = req.user.id;
+    console.log("clientID", clientID);
+    const sqlGetCartIdByClientId = `SELECT cart_id FROM clients WHERE client_id=?`;
+    const [clientResult] = await connection
+      .promise()
+      .query(sqlGetCartIdByClientId, [clientID]);
 
-//  server.post("/cart", authenticationToken, async (req, res) => {
-//     try {
-//       const clientID = req.user.id;
-//       const sqlItemInCart = `SELECT COUNT(cart_id) AS NumberOfProducts FROM cart_products WHERE cart_id=?`;
+    const cartID = clientResult[0].cart_id;
+    console.log("cartID", cartID);
+    const sqlGetItemIds = `SELECT product_id FROM cart_products WHERE cart_id=?`;
+    const [cartResult] = await connection
+      .promise()
+      .query(sqlGetItemIds, [cartID]);
 
-//       const [cartResult] = await connection
-//         .promise()
-//         .query(sqlItemInCart, [clientID]);
-//       const numberOfProducts = cartResult[0].NumberOfProducts;
-//       console.log(numberOfProducts);
-
-//       res.status(201).json({ NumberOfProducts: numberOfProducts });
-//     } catch (error) {
-//       console.error("Błąd serwera:", error.message);
-//       res.status(500).json({ message: "Server error" });
-//     }
-//  });
+    let itemsInCart = [];
+    for (let item of cartResult) {
+      const itemId = item.product_id;
+      console.log("itemId", itemId);
+      const sqlGetItemById = `SELECT name, description, price FROM products WHERE id=?`;
+      const [itemResult] = await connection
+        .promise()
+        .query(sqlGetItemById, [itemId]);
+      console.log(itemResult);
+      itemsInCart.push(itemResult[0]);
+    }
+    console.log(itemsInCart);
+    
+    const jsonString = JSON.stringify(itemsInCart, null, 2);
+    console.log(jsonString);
+    
+    res.status(201).json(jsonString);
+  } catch (error) {
+    console.error("Błąd serwera:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});

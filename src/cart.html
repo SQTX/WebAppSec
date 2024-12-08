@@ -52,8 +52,8 @@
                   <th scope="col">Cena</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
+              <tbody id="cartContainer">
+                <!-- <tr>
                   <th scope="row">
                     <div class="d-flex align-items-center">
                       <img
@@ -105,7 +105,7 @@
                       PLN
                     </p>
                   </td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>
@@ -269,7 +269,7 @@
                   >
                     <p class="mb-2">Cena łączna</p>
                     <p class="mb-2">
-                      <span class="prod-price">0,00</span>
+                      <span id="sumPrice" class="prod-price">0,00</span>
                       PLN
                     </p>
                   </div>
@@ -280,7 +280,7 @@
                   >
                     <p class="mb-0">Dostawa</p>
                     <p class="mb-0">
-                      <span class="prod-price">0,00</span>
+                      <span id="shipPrice" class="prod-price">0,00</span>
                       PLN
                     </p>
                   </div>
@@ -293,7 +293,7 @@
                   >
                     <p class="mb-2">Do zapłaty</p>
                     <p class="mb-2">
-                      <span class="prod-price">0,00</span>
+                      <span id="totalPrice" class="prod-price">0,00</span>
                       PLN
                     </p>
                   </div>
@@ -317,3 +317,4 @@
     </div>
   </section>
 </main>
+<script src="./js/cartLoad.js"></script>

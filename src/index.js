@@ -7,6 +7,8 @@ import "./js/feature.js";
 import "./js/logout.js";
 import "./js/load.js";
 import "./js/addNewItem.js";
+import "./js/cart.js";
+import "./js/cartLoad.js";
 
 import "../public/assets/img/no-photo.jpg";
 import "../public/assets/img/areopress.jpg";

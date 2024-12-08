@@ -46,3 +46,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibG9naW4iO
 {
   "item_id": 4
 }
+
+###
+GET http://localhost:3000/cart/data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibG9naW4iOiJUb21pIiwiaWF0IjoxNzMzNjkxNDczLCJleHAiOjE3MzM2OTIzNzN9.pQS8CauEE9UnLZiBsQVn2pEBUbr05MccGDQv_qFo8cg
