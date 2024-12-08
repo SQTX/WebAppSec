@@ -159,9 +159,7 @@ function authenticationToken(req, res, next) {
   });
 }
 
-
 module.exports = authenticationToken;
-
 
 function getUserIdFromToken(token) {
   try {
@@ -195,7 +193,6 @@ function getUserIdFromToken(token) {
   }
 }
 
-
 const connection = mysql.createConnection(dbConfig); // Connection with DB
 
 // Endpoint rejestracji użytkownika
@@ -217,7 +214,33 @@ server.get("/cart/numberof", authenticationToken, async (req, res) => {
   }
 });
 
+server.post("/cart/additem", authenticationToken, async (req, res) => {
+  try {
+    console.log(req);
 
+    const clientID = req.user.id;
+    const itemID = req.body.item_id;
+    const quantity = 1;
+    // console.log("Client:", clientID);
+    // console.log("Item:", itemID);
+    // console.log("Q:", quantity);
+
+    const sqlAddItem = `
+      INSERT INTO cart_products (cart_id, product_id, quantity)
+      VALUES (?, ?, ?)`;
+
+    await connection.promise().query(sqlAddItem, [clientID, itemID, quantity]);
+
+    console.log(
+      `User [${clientID}] has added [${quantity}] new items [${itemID}] to his/her cart`
+    );
+
+    res.status(201).json({ Message: "Add new item to cart" });
+  } catch (error) {
+    console.error("Błąd serwera:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 //  const connection = mysql.createConnection(dbConfig);
 

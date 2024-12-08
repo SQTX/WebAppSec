@@ -37,3 +37,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibG9naW4iO
 ###
 GET http://localhost:3000/cart/numberof
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibG9naW4iOiJ0b3JiaSIsImlhdCI6MTczMzY4MDg0MywiZXhwIjoxNzMzNjgxNzQzfQ.hngIKH1tQJVDzNKbQ7ojqbiM1Rc-2dIoUjGy5FuaigQ
+
+###
+POST http://localhost:3000/cart/additem
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibG9naW4iOiJUb21pIiwiaWF0IjoxNzMzNjg0MTU3LCJleHAiOjE3MzM2ODUwNTd9.a25Mrxi70au0N5hCS1nEPkHYfvTHucXXHSCasi1Fc0o
+
+{
+  "item_id": 4
+}

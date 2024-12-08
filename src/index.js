@@ -6,6 +6,7 @@ import "./js/sign-up.js";
 import "./js/feature.js";
 import "./js/logout.js";
 import "./js/load.js";
+import "./js/addNewItem.js";
 
 import "../public/assets/img/no-photo.jpg";
 import "../public/assets/img/areopress.jpg";
@@ -15,5 +16,3 @@ import "../public/assets/img/beans_3.jpg";
 import "../public/assets/img/beans_4.jpg";
 import "../public/assets/img/fellow_grinder.jpg";
 import "../public/assets/img/kommandante_grinder.jpg";
-
-
