@@ -5,8 +5,6 @@ for (let product of productBoxes) {
   product.addEventListener("click", () => {
     const itemId = product.getAttribute("data-item-id");
 
-    // console.log("klik klik", itemId);
-
     const jwtToken = localStorage.accessToken;
 
     const payload = {

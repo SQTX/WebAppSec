@@ -9,6 +9,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mysql = require("mysql2");
 
+const getUserIdFromToken = require("./routes/auth.js");
+
 // Konfiguracja połączenia
 const dbConfig = {
   host: "localhost", // Adres hosta (dla lokalnego serwera to 'localhost')
@@ -61,6 +63,9 @@ userLogout(server, jwt, dbConfig);
 
 rulesFile(server, path);
 
+// --------------------------------------------------------------
+// Refresh token:
+// --------------------------------------------------------------
 server.post("/token", (req, res) => {
   const { refreshToken } = req.body; // Pobieramy refreshToken z żądania
 
@@ -96,8 +101,10 @@ server.post("/token", (req, res) => {
   });
 });
 
-
-// Funkcja do autoryzacji tokenu
+// --------------------------------------------------------------
+// Main Auth function:
+// --------------------------------------------------------------
+// // // Funkcja do autoryzacji tokenu
 function authenticationToken(req, res, next) {
   // Poprawny sposób pobrania nagłówka "authorization"
   const authHeader = req.headers["authorization"];
@@ -145,122 +152,15 @@ function authenticationToken(req, res, next) {
 
 module.exports = authenticationToken;
 
-function getUserIdFromToken(token) {
-  try {
-    // Podziel token na trzy części
-    const parts = token.split(".");
+// --------------------------------------------------------------
+// Cart Functions:
+// --------------------------------------------------------------
+const {
+  getNumberOfProducts,
+  addItemToCart,
+  getCartData,
+} = require("./routes/cart");
 
-    if (parts.length !== 3) {
-      throw new Error("Nieprawidłowy token JWT");
-    }
-
-    // Zdekoduj drugą część (payload), która jest zakodowana w Base64
-    const payloadBase64 = parts[1];
-
-    // Zdekoduj Base64 do formatu JSON
-    const decodedPayload = Buffer.from(payloadBase64, "base64").toString(
-      "utf8"
-    );
-
-    // Parsuj JSON
-    const parsedPayload = JSON.parse(decodedPayload);
-
-    // Zakładając, że ID użytkownika jest zapisane w polu 'id'
-    if (parsedPayload && parsedPayload.id) {
-      return parsedPayload.id;
-    } else {
-      throw new Error("Nie znaleziono ID użytkownika w tokenie");
-    }
-  } catch (error) {
-    console.error("Błąd dekodowania tokenu JWT:", error.message);
-    return null; // Zwróć null, jeśli wystąpi błąd
-  }
-}
-
-const connection = mysql.createConnection(dbConfig); // Connection with DB
-
-// Endpoint rejestracji użytkownika
-server.get("/cart/numberof", authenticationToken, async (req, res) => {
-  try {
-    const clientID = req.user.id;
-    const sqlItemInCart = `SELECT COUNT(cart_id) AS NumberOfProducts FROM cart_products WHERE cart_id=?`;
-
-    const [cartResult] = await connection
-      .promise()
-      .query(sqlItemInCart, [clientID]);
-    const numberOfProducts = cartResult[0].NumberOfProducts;
-    console.log(numberOfProducts);
-
-    res.status(201).json({ NumberOfProducts: numberOfProducts });
-  } catch (error) {
-    console.error("Błąd serwera:", error.message);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-server.post("/cart/additem", authenticationToken, async (req, res) => {
-  try {
-    console.log(req);
-
-    const clientID = req.user.id;
-    const itemID = req.body.item_id;
-    const quantity = 1;
-    // console.log("Client:", clientID);
-    // console.log("Item:", itemID);
-    // console.log("Q:", quantity);
-
-    const sqlAddItem = `
-      INSERT INTO cart_products (cart_id, product_id, quantity)
-      VALUES (?, ?, ?)`;
-
-    await connection.promise().query(sqlAddItem, [clientID, itemID, quantity]);
-
-    console.log(
-      `User [${clientID}] has added [${quantity}] new items [${itemID}] to his/her cart`
-    );
-
-    res.status(201).json({ Message: "Add new item to cart" });
-  } catch (error) {
-    console.error("Błąd serwera:", error.message);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-server.get("/cart/data", authenticationToken, async (req, res) => {
-  try {
-    const clientID = req.user.id;
-    console.log("clientID", clientID);
-    const sqlGetCartIdByClientId = `SELECT cart_id FROM clients WHERE client_id=?`;
-    const [clientResult] = await connection
-      .promise()
-      .query(sqlGetCartIdByClientId, [clientID]);
-
-    const cartID = clientResult[0].cart_id;
-    console.log("cartID", cartID);
-    const sqlGetItemIds = `SELECT product_id FROM cart_products WHERE cart_id=?`;
-    const [cartResult] = await connection
-      .promise()
-      .query(sqlGetItemIds, [cartID]);
-
-    let itemsInCart = [];
-    for (let item of cartResult) {
-      const itemId = item.product_id;
-      console.log("itemId", itemId);
-      const sqlGetItemById = `SELECT name, description, price FROM products WHERE id=?`;
-      const [itemResult] = await connection
-        .promise()
-        .query(sqlGetItemById, [itemId]);
-      console.log(itemResult);
-      itemsInCart.push(itemResult[0]);
-    }
-    console.log(itemsInCart);
-    
-    const jsonString = JSON.stringify(itemsInCart, null, 2);
-    console.log(jsonString);
-    
-    res.status(201).json(jsonString);
-  } catch (error) {
-    console.error("Błąd serwera:", error.message);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+getNumberOfProducts(server, mysql, dbConfig);
+addItemToCart(server, mysql, dbConfig);
+getCartData(server, mysql, dbConfig);

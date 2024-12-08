@@ -108,7 +108,8 @@ function updatePrice(fullPrice, shipPrice) {
 
   sumPriceSpan.innerText = fullPrice;
   shipPriceSpan.innerText = shipPrice;
-  totalPriceSpan.innerText = Number(fullPrice) + Number(shipPrice);
+  let total = Number(fullPrice) + Number(shipPrice);
+  totalPriceSpan.innerText = Math.round(total * 100) / 100;
 }
 
 // Wykonaj funkcję po załadowaniu strony
