@@ -40,61 +40,73 @@ function usersSignIn(server, bcrypt, jwt, dbConfig) {
         }
 
         // Pobranie ACCESS_TOKEN_SECRET i REFRESH_TOKEN_SECRET z bazy danych
-        const sqlSecrets = `SELECT access_token_secret, refresh_token_secret FROM clients WHERE id = ?`;
-        connection.query(sqlSecrets, [user.id], async (err, secretsResults) => {
-          if (err) {
-            console.error(
-              "Błąd zapytania do bazy danych (secrets):",
-              err.message
-            );
-            return res.status(500).json({ message: "Database error" });
-          }
-
-          // Sprawdzenie, czy znaleziono sekrety
-          if (secretsResults.length === 0) {
-            return res
-              .status(404)
-              .json({ message: "Secrets not found for user" });
-          }
-
-          const { access_token_secret, refresh_token_secret } =
-            secretsResults[0];
-
-          // Generowanie tokenów
-          const accessToken = jwt.sign(
-            { id: user.id, login: user.login }, // Dane użytkownika w tokenie
-            access_token_secret,
-            { expiresIn: "15m" } // Token ważny przez 15 minut
-          );
-
-          const refreshToken = jwt.sign(
-            { id: user.id, login: user.login }, // Dane użytkownika w tokenie
-            refresh_token_secret,
-            { expiresIn: "7d" } // Token ważny przez 7 dni
-          );
-
-          console.log("Login successful:", login);
-          console.log("Generated JWT:", accessToken);
-          console.log("Generated refJWT:", refreshToken);
-
-          // Opcjonalne zapisanie refreshToken w bazie danych
-          const updateTokenSql = `UPDATE clients SET refJWT_token = ? WHERE id = ?`;
-          connection.query(updateTokenSql, [refreshToken, user.id], (err) => {
+        const sqlSecrets = `SELECT access_token_secret, refresh_token_secret FROM clients WHERE client_id = ?`;
+        console.log(user);
+        connection.query(
+          sqlSecrets,
+          [user.client_id],
+          async (err, secretsResults) => {
             if (err) {
-              console.error("Błąd podczas zapisywania tokenu:", err.message);
-              return res
-                .status(500)
-                .json({ message: "Failed to save refresh token" });
+              console.error(
+                "Błąd zapytania do bazy danych (secrets):",
+                err.message
+              );
+              return res.status(500).json({ message: "Database error" });
             }
 
-            // Zwrócenie tokenów do klienta
-            res.status(200).json({
-              message: "Login successful",
-              accessToken,
-              refreshToken,
-            });
-          });
-        });
+            // Sprawdzenie, czy znaleziono sekrety
+            if (secretsResults.length === 0) {
+              return res
+                .status(404)
+                .json({ message: "Secrets not found for user" });
+            }
+
+            const { access_token_secret, refresh_token_secret } =
+              secretsResults[0];
+
+            // Generowanie tokenów
+            const accessToken = jwt.sign(
+              { id: user.id, login: user.login }, // Dane użytkownika w tokenie
+              access_token_secret,
+              { expiresIn: "15m" } // Token ważny przez 15 minut
+            );
+
+            const refreshToken = jwt.sign(
+              { id: user.id, login: user.login }, // Dane użytkownika w tokenie
+              refresh_token_secret,
+              { expiresIn: "7d" } // Token ważny przez 7 dni
+            );
+
+            console.log("Login successful:", login);
+            console.log("Generated JWT:", accessToken);
+            console.log("Generated refJWT:", refreshToken);
+
+            // Opcjonalne zapisanie refreshToken w bazie danych
+            const updateTokenSql = `UPDATE clients SET refJWT_token = ? WHERE client_id = ?`;
+            connection.query(
+              updateTokenSql,
+              [refreshToken, user.client_id],
+              (err) => {
+                if (err) {
+                  console.error(
+                    "Błąd podczas zapisywania tokenu:",
+                    err.message
+                  );
+                  return res
+                    .status(500)
+                    .json({ message: "Failed to save refresh token" });
+                }
+
+                // Zwrócenie tokenów do klienta
+                res.status(200).json({
+                  message: "Login successful",
+                  accessToken,
+                  refreshToken,
+                });
+              }
+            );
+          }
+        );
       });
     } catch (error) {
       console.error("Błąd podczas logowania:", error.message);
