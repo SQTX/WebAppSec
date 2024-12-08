@@ -24,13 +24,20 @@ function usersSignUp(server, bcrypt, dbConfig) {
         password: hashedPassword,
       };
 
-      // SQL do wstawienia użytkownika do bazy danych
+      // MySQL queries:
+      const sqlCreateNewCart = `INSERT INTO carts (session_id) VALUES ('session12345')`;
+
       const sqlAddUserQuery = `
-        INSERT INTO clients (name, login, email, password_hash, access_token_secret, refresh_token_secret)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO clients (name, login, email, password_hash, access_token_secret, refresh_token_secret, cart_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
 
-      // Do SQL query:
+      // Create new shop cart for new user:
+      const [cartResult] = await connection.promise().query(sqlCreateNewCart);
+      const cartId = cartResult.insertId;
+      console.log(`New shop cart has created, ID: ${cartId}`);
+
+      // Create new client profile:
       connection.query(
         sqlAddUserQuery,
         [
@@ -40,6 +47,7 @@ function usersSignUp(server, bcrypt, dbConfig) {
           hashedPassword,
           accessTokenSecret,
           refreshTokenSecret,
+          cartId,
         ],
         (err, results) => {
           if (err) {
@@ -48,7 +56,7 @@ function usersSignUp(server, bcrypt, dbConfig) {
             return;
           }
 
-          console.log("Użytkownik dodany! ID:", results.insertId);
+          console.log("New client has added, ID:", results.insertId);
           res.status(201).json({ message: "Account was created" });
         }
       );
