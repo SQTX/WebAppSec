@@ -88,6 +88,11 @@ module.exports = {
       template: "src/sign-up.html",
       chunks: ["main"],
     }),
+    new HtmlWebpackPlugin({
+      filename: "cart.html",
+      template: "src/cart.html",
+      chunks: ["main"],
+    }),
     new webpack.HotModuleReplacementPlugin(),
   ],
 };

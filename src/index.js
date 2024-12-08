@@ -6,6 +6,7 @@ import "./js/sign-up.js";
 import "./js/feature.js";
 import "./js/logout.js";
 
+import "../public/assets/img/no-photo.jpg";
 import "../public/assets/img/areopress.jpg";
 import "../public/assets/img/beans_1.jpg";
 import "../public/assets/img/beans_2.jpg";

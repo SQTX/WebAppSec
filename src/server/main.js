@@ -14,7 +14,7 @@ const dbConfig = {
   host: "localhost", // Adres hosta (dla lokalnego serwera to 'localhost')
   user: "root", // Nazwa użytkownika MySQL (np. 'root')
   password: "sqtx7177", // Hasło użytkownika
-  database: "coffee_store_users", // Nazwa bazy danych, do której chcesz się połączyć
+  database: "CoffeeShop", // Nazwa bazy danych, do której chcesz się połączyć
   port: 3306, // Domyślny port MySQL
 };
 
