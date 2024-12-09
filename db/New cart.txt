@@ -1,0 +1,15 @@
+USE CoffeeShop;
+
+-- Tworzenie tabeli 'carts'
+CREATE TABLE carts (
+    cart_id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Przykładowe dane do tabeli
+INSERT INTO carts (session_id) 
+VALUES ('session12345');
+
+-- Wyświetlenie danych z tabeli 'carts'
+SELECT * FROM carts;

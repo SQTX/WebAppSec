@@ -1,0 +1,30 @@
+-- Tworzenie bazy danych
+CREATE DATABASE IF NOT EXISTS CoffeeShop;
+USE CoffeeShop;
+
+-- Tworzenie tabeli 'products'
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    price DECIMAL(10, 2) NOT NULL,
+    number INT NOT NULL,
+    is_new BOOLEAN NOT NULL
+);
+
+-- Dodanie danych do tabeli
+INSERT INTO products (name, description, price, number, is_new) VALUES
+('Arcaffe Roma', '1kg', 109.99, 10, TRUE),
+('HAYB - Się Przelewa', 'Klasyk Filter Blend 1kg', 133.99, 10, FALSE),
+('AreoPRESS', 'Tłok + narzędzia', 129.99, 10, FALSE),
+('Comandante - Młynek', 'Nitro Blade Black', 109.99, 10, FALSE),
+('Fellow Ode', 'Młynek automatyczny - Czarny', 1290.90, 10, FALSE),
+('Lavazza Qualita Oro', NULL, 80.00, 10, FALSE),
+('Pellini Top', '100% Arabica', 79.00, 10, FALSE);
+
+-- INSERT INTO products (name, description, price, number, is_new) VALUES ('Foo', 'Foo', 0.0, 0, false);
+
+-- Wyświetlenie danych dla weryfikacji
+SELECT * FROM products;
+
+SELECT name, description, price FROM products WHERE id=2;
